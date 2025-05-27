@@ -5,6 +5,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image/image.dart' as img; // For image resizing
+import 'package:rice_app/config/app_constants.dart';
+import 'config/size_config.dart'; // Custom size config
 
 void main() {
   runApp(const RiceDiseaseClassifierApp());
@@ -19,16 +21,16 @@ class RiceDiseaseClassifierApp extends StatelessWidget {
       title: 'Rice Disease Classifier',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: const Color(0xFF4CAF50),
+        primaryColor: AppConstants.primaryColor,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF4CAF50),
+          seedColor: AppConstants.primaryColor,
           brightness: Brightness.light,
         ),
         textTheme: GoogleFonts.poppinsTextTheme(),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             foregroundColor: Colors.white,
-            backgroundColor: const Color(0xFF4CAF50),
+            backgroundColor: AppConstants.primaryColor,
             elevation: 3,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             shape: RoundedRectangleBorder(
@@ -85,6 +87,9 @@ class _DiseaseClassifierScreenState extends State<DiseaseClassifierScreen>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      SizeConfig.init(context);
+    });
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 1500),
       vsync: this,
@@ -281,13 +286,17 @@ class _DiseaseClassifierScreenState extends State<DiseaseClassifierScreen>
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig.init(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Rice Disease Detector',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: SizeConfig.textMultiplier * 2.2,
+          ),
         ),
-        backgroundColor: const Color(0xFF4CAF50),
+        backgroundColor: AppConstants.primaryColor,
         foregroundColor: Colors.white,
         elevation: 0,
       ),
@@ -296,49 +305,59 @@ class _DiseaseClassifierScreenState extends State<DiseaseClassifierScreen>
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [const Color(0xFF4CAF50).withOpacity(0.3), Colors.white],
+            colors: [AppConstants.primaryColor.withOpacity(0.3), Colors.white],
           ),
         ),
         child: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: EdgeInsets.all(SizeConfig.blockSizeHorizontal * 5),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   // Header section
-                  const Text(
+                  Text(
                     'Identify Rice Plant Diseases',
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: SizeConfig.textMultiplier * 3,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF2E7D32),
+                      color: AppConstants.secondaryColor,
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 8),
-                  const Text(
+                  SizedBox(height: SizeConfig.blockSizeVertical * 1),
+                  Text(
                     'Take or select a photo of rice leaves to identify diseases',
-                    style: TextStyle(fontSize: 16, color: Color(0xFF616161)),
+                    style: TextStyle(
+                      fontSize: SizeConfig.textMultiplier * 2,
+                      color: AppConstants.neutral1,
+                    ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 30),
+                  SizedBox(height: SizeConfig.blockSizeVertical * 3),
+
                   // Image Display Card
                   Card(
                     elevation: 4,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(
+                        SizeConfig.blockSizeHorizontal * 5,
+                      ),
                     ),
                     child: Container(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(
+                          SizeConfig.blockSizeHorizontal * 5,
+                        ),
                         border: Border.all(
-                          color: const Color(0xFF4CAF50).withOpacity(0.5),
+                          color: AppConstants.primaryColor.withOpacity(0.5),
                           width: 2,
                         ),
                       ),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(18),
+                        borderRadius: BorderRadius.circular(
+                          SizeConfig.blockSizeHorizontal * 4.5,
+                        ),
                         child: Stack(
                           alignment: Alignment.center,
                           children: [
@@ -346,12 +365,12 @@ class _DiseaseClassifierScreenState extends State<DiseaseClassifierScreen>
                             _image != null
                                 ? Image.file(
                                   _image!,
-                                  height: 300,
+                                  height: SizeConfig.blockSizeVertical * 35,
                                   width: double.infinity,
                                   fit: BoxFit.cover,
                                 )
                                 : Container(
-                                  height: 300,
+                                  height: SizeConfig.blockSizeVertical * 35,
                                   width: double.infinity,
                                   color: Colors.grey[200],
                                   child: Column(
@@ -359,66 +378,85 @@ class _DiseaseClassifierScreenState extends State<DiseaseClassifierScreen>
                                     children: [
                                       FadeTransition(
                                         opacity: _animation,
-                                        child: const Icon(
+                                        child: Icon(
                                           Icons.agriculture_outlined,
-                                          size: 80,
-                                          color: Color(0xFF4CAF50),
+                                          size:
+                                              SizeConfig.imageSizeMultiplier *
+                                              20,
+                                          color: AppConstants.primaryColor,
                                         ),
                                       ),
-                                      const SizedBox(height: 16),
-                                      const Text(
+                                      SizedBox(
+                                        height:
+                                            SizeConfig.blockSizeVertical * 2,
+                                      ),
+                                      Text(
                                         'No image selected',
                                         style: TextStyle(
                                           color: Color(0xFF757575),
-                                          fontSize: 16,
+                                          fontSize:
+                                              SizeConfig.textMultiplier * 2,
                                         ),
                                       ),
                                     ],
                                   ),
                                 ),
+
                             // Processing overlay
                             if (_isProcessingImage)
                               Container(
-                                height: 300,
+                                height: SizeConfig.blockSizeVertical * 35,
                                 width: double.infinity,
                                 color: Colors.black.withOpacity(0.7),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    const Icon(
+                                    Icon(
                                       Icons.image_search,
-                                      color: Color(0xFF4CAF50),
-                                      size: 40,
+                                      color: AppConstants.primaryColor,
+                                      size: SizeConfig.imageSizeMultiplier * 10,
                                     ),
-                                    const SizedBox(height: 16),
+                                    SizedBox(
+                                      height: SizeConfig.blockSizeVertical * 2,
+                                    ),
                                     Text(
                                       _processingText,
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 16,
+                                        fontSize: SizeConfig.textMultiplier * 2,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    const SizedBox(height: 20),
                                     SizedBox(
-                                      width: 200,
+                                      height:
+                                          SizeConfig.blockSizeVertical * 2.5,
+                                    ),
+                                    SizedBox(
+                                      width:
+                                          SizeConfig.blockSizeHorizontal * 50,
                                       child: LinearProgressIndicator(
                                         value: _processingProgress,
                                         backgroundColor: Colors.white24,
                                         valueColor:
                                             const AlwaysStoppedAnimation<Color>(
-                                              Color(0xFF4CAF50),
+                                              AppConstants.primaryColor,
                                             ),
-                                        borderRadius: BorderRadius.circular(8),
-                                        minHeight: 8,
+                                        borderRadius: BorderRadius.circular(
+                                          SizeConfig.blockSizeHorizontal * 2,
+                                        ),
+                                        minHeight:
+                                            SizeConfig.blockSizeVertical * 1,
                                       ),
                                     ),
-                                    const SizedBox(height: 8),
+                                    SizedBox(
+                                      height: SizeConfig.blockSizeVertical * 1,
+                                    ),
                                     Text(
                                       '${(_processingProgress * 100).toInt()}%',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 14,
+                                        fontSize:
+                                            SizeConfig.textMultiplier * 1.8,
                                       ),
                                     ),
                                   ],
@@ -429,61 +467,86 @@ class _DiseaseClassifierScreenState extends State<DiseaseClassifierScreen>
                       ),
                     ),
                   ),
-                  const SizedBox(height: 30),
+
+                  SizedBox(height: SizeConfig.blockSizeVertical * 3),
+
                   // Buttons for Image Selection
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Expanded(
                         child: ElevatedButton.icon(
-                          icon: const Icon(Icons.camera_alt),
-                          label: const Text('Camera'),
+                          icon: Icon(
+                            Icons.camera_alt,
+                            size: SizeConfig.imageSizeMultiplier * 5,
+                          ),
+                          label: Text(
+                            'Camera',
+                            style: TextStyle(
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                          ),
                           onPressed:
                               (_isLoading || _isProcessingImage)
                                   ? null
                                   : () => pickImage(ImageSource.camera),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF4CAF50),
-                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            backgroundColor: AppConstants.primaryColor,
+                            padding: EdgeInsets.symmetric(
+                              vertical: SizeConfig.blockSizeVertical * 1.5,
+                            ),
                             disabledBackgroundColor: Colors.grey.shade400,
                           ),
                         ),
                       ),
-                      const SizedBox(width: 16),
+                      SizedBox(width: SizeConfig.blockSizeHorizontal * 4),
                       Expanded(
                         child: ElevatedButton.icon(
-                          icon: const Icon(Icons.photo_library),
-                          label: const Text('Gallery'),
+                          icon: Icon(
+                            Icons.photo_library,
+                            size: SizeConfig.imageSizeMultiplier * 5,
+                          ),
+                          label: Text(
+                            'Gallery',
+                            style: TextStyle(
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                          ),
                           onPressed:
                               (_isLoading || _isProcessingImage)
                                   ? null
                                   : () => pickImage(ImageSource.gallery),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF66BB6A),
-                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            padding: EdgeInsets.symmetric(
+                              vertical: SizeConfig.blockSizeVertical * 1.5,
+                            ),
                             disabledBackgroundColor: Colors.grey.shade400,
                           ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 30),
+
+                  SizedBox(height: SizeConfig.blockSizeVertical * 3),
+
                   // Result Section
                   if (_isLoading && !_isProcessingImage)
                     Center(
                       child: Column(
                         children: [
-                          const CircularProgressIndicator(
+                          CircularProgressIndicator(
                             valueColor: AlwaysStoppedAnimation<Color>(
                               Color(0xFF4CAF50),
                             ),
                           ),
-                          const SizedBox(height: 16),
+                          SizedBox(height: SizeConfig.blockSizeVertical * 2),
                           Text(
                             _processingText,
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: Color(0xFF4CAF50),
                               fontWeight: FontWeight.bold,
+                              fontSize: SizeConfig.textMultiplier * 1.8,
                             ),
                           ),
                         ],
@@ -493,61 +556,73 @@ class _DiseaseClassifierScreenState extends State<DiseaseClassifierScreen>
                     Card(
                       elevation: 4,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(
+                          SizeConfig.blockSizeHorizontal * 5,
+                        ),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.all(20.0),
+                        padding: EdgeInsets.all(
+                          SizeConfig.blockSizeHorizontal * 5,
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
-                              children: const [
-                                Icon(Icons.analytics, color: Color(0xFF4CAF50)),
-                                SizedBox(width: 8),
+                              children: [
+                                Icon(
+                                  Icons.analytics,
+                                  color: Color(0xFF4CAF50),
+                                  size: SizeConfig.imageSizeMultiplier * 6,
+                                ),
+                                SizedBox(
+                                  width: SizeConfig.blockSizeHorizontal * 2,
+                                ),
                                 Text(
                                   'Analysis Result',
                                   style: TextStyle(
-                                    fontSize: 18,
+                                    fontSize: SizeConfig.textMultiplier * 2.2,
                                     fontWeight: FontWeight.bold,
                                     color: Color(0xFF2E7D32),
                                   ),
                                 ),
                               ],
                             ),
-                            const Divider(height: 24),
-                            const Text(
+                            Divider(height: SizeConfig.blockSizeVertical * 3),
+                            Text(
                               'Detected Disease:',
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: SizeConfig.textMultiplier * 2,
                                 color: Color(0xFF757575),
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            SizedBox(height: SizeConfig.blockSizeVertical * 1),
                             Text(
                               _result,
-                              style: const TextStyle(
-                                fontSize: 22,
+                              style: TextStyle(
+                                fontSize: SizeConfig.textMultiplier * 2.8,
                                 fontWeight: FontWeight.bold,
                                 color: Color(0xFF2E7D32),
                               ),
                             ),
-                            const SizedBox(height: 16),
+                            SizedBox(height: SizeConfig.blockSizeVertical * 2),
                             if (_diseaseInfo.containsKey(_result))
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
+                                  Text(
                                     'Description:',
                                     style: TextStyle(
-                                      fontSize: 16,
+                                      fontSize: SizeConfig.textMultiplier * 2,
                                       color: Color(0xFF757575),
                                     ),
                                   ),
-                                  const SizedBox(height: 8),
+                                  SizedBox(
+                                    height: SizeConfig.blockSizeVertical * 1,
+                                  ),
                                   Text(
                                     _diseaseInfo[_result]!,
-                                    style: const TextStyle(
-                                      fontSize: 16,
+                                    style: TextStyle(
+                                      fontSize: SizeConfig.textMultiplier * 2,
                                       color: Color(0xFF424242),
                                     ),
                                   ),
@@ -566,3 +641,103 @@ class _DiseaseClassifierScreenState extends State<DiseaseClassifierScreen>
     );
   }
 }
+
+
+
+//
+/*
+
+
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:rice_app/screens/disease_classifier_screen.dart';
+import 'package:rice_app/config/app_constants.dart';
+import 'package:rice_app/screens/home_screen.dart';
+
+void main() {
+  runApp(const RiceDiseaseClassifierApp());
+}
+
+class RiceDiseaseClassifierApp extends StatelessWidget {
+  const RiceDiseaseClassifierApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Rice Disease Classifier',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primaryColor: AppConstants.primaryColor,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: AppConstants.primaryColor,
+          brightness: Brightness.light,
+        ),
+        textTheme: GoogleFonts.poppinsTextTheme(),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            foregroundColor: Colors.white,
+            backgroundColor: AppConstants.primaryColor,
+            elevation: 3,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        ),
+      ),
+      home: const HomeScreen(),
+    );
+  }
+}
+
+
+
+
+import 'package:flutter/material.dart';
+
+class AppConstants {
+  // App Information
+  static const String appName = 'Disease Classifier';
+  static const String appVersion = '1.0.0';
+
+  // colors
+  static const Color primaryColor = Color(0xFF4CAF50);
+  static const Color secondaryColor = Color(0xFF2E7D32);
+  static const Color neutral1 = Color(0xFF616161);
+
+  // API Endpoints
+  static const String baseUrl = 'https://api.example.com/';
+}
+
+//
+import 'package:flutter/widgets.dart';
+
+class SizeConfig {
+  static late MediaQueryData _mediaQueryData;
+  static late double screenWidth;
+  static late double screenHeight;
+  static late double blockSizeHorizontal;
+  static late double blockSizeVertical;
+
+  static late double textMultiplier;
+  static late double imageSizeMultiplier;
+  static late double heightMultiplier;
+
+  static late Orientation orientation;
+
+  /// Call this method in the build method of your app's root widget (usually in the first screen).
+  static void init(BuildContext context) {
+    _mediaQueryData = MediaQuery.of(context);
+    screenWidth = _mediaQueryData.size.width;
+    screenHeight = _mediaQueryData.size.height;
+    orientation = _mediaQueryData.orientation;
+
+    blockSizeHorizontal = screenWidth / 100;
+    blockSizeVertical = screenHeight / 100;
+
+    textMultiplier = blockSizeVertical;
+    imageSizeMultiplier = blockSizeHorizontal;
+    heightMultiplier = blockSizeVertical;
+  }
+}
+*/
