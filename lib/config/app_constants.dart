@@ -11,6 +11,6 @@ class AppConstants {
   static const Color neutral1 = Color(0xFF616161);
 
   // API Endpoints
-  static const String serverUrl =
+  static const String RiceserverUrl =
       "https://rice-server-j666.onrender.com/predict/";
 }

@@ -3,23 +3,13 @@ import 'package:rice_app/config/size_config.dart';
 import 'package:rice_app/models/disease_model.dart';
 
 class ResultDisplayCard extends StatelessWidget {
-  final String diseaseName;
-  final int cropId; // Added cropId parameter
+  final DiseaseModel diseaseModel;
 
-  const ResultDisplayCard({
-    Key? key,
-    required this.diseaseName,
-    required this.cropId,
-  }) : super(key: key);
+  const ResultDisplayCard({Key? key, required this.diseaseModel})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Get description using the existing method
-    final description = DiseaseModel.getDescriptionForDisease(
-      diseaseName,
-      cropId,
-    );
-
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(
@@ -58,7 +48,7 @@ class ResultDisplayCard extends StatelessWidget {
             ),
             SizedBox(height: SizeConfig.blockSizeVertical * 1),
             Text(
-              diseaseName,
+              diseaseModel.name,
               style: TextStyle(
                 fontSize: SizeConfig.textMultiplier * 2.8,
                 fontWeight: FontWeight.bold,
@@ -78,7 +68,7 @@ class ResultDisplayCard extends StatelessWidget {
                 ),
                 SizedBox(height: SizeConfig.blockSizeVertical * 1),
                 Text(
-                  description,
+                  diseaseModel.description,
                   style: TextStyle(
                     fontSize: SizeConfig.textMultiplier * 2,
                     color: Color(0xFF424242),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rice_app/config/app_constants.dart';
 import 'package:rice_app/config/size_config.dart';
+import 'package:rice_app/models/disease_model.dart';
 import 'package:rice_app/services/disease_service.dart';
 import 'package:rice_app/services/image_service.dart';
 import 'package:rice_app/widgets/image_display_card.dart';
@@ -27,6 +28,7 @@ class _DiseaseClassifierScreenState extends State<DiseaseClassifierScreen>
     with SingleTickerProviderStateMixin {
   File? _image;
   String _result = '';
+  DiseaseModel? _diseaseModel; // Add this line to store the disease model
   bool _isLoading = false;
   bool _isProcessingImage = false;
   double _processingProgress = 0.0;
@@ -116,6 +118,7 @@ class _DiseaseClassifierScreenState extends State<DiseaseClassifierScreen>
     try {
       setState(() {
         _result = '';
+        _diseaseModel = null; // Reset the disease model
       });
 
       // Pick image from camera or gallery
@@ -151,6 +154,7 @@ class _DiseaseClassifierScreenState extends State<DiseaseClassifierScreen>
       // Update UI with result
       setState(() {
         _result = diseaseModel.name;
+        _diseaseModel = diseaseModel; // Store the disease model
         _isLoading = false;
       });
     } catch (e) {
@@ -164,6 +168,7 @@ class _DiseaseClassifierScreenState extends State<DiseaseClassifierScreen>
       _isLoading = false;
       _isProcessingImage = false;
       _result = 'Error';
+      _diseaseModel = null; // Reset disease model on error
     });
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -341,8 +346,8 @@ class _DiseaseClassifierScreenState extends State<DiseaseClassifierScreen>
           ],
         ),
       );
-    } else if (_result.isNotEmpty) {
-      return ResultDisplayCard(diseaseName: _result, cropId: widget.cropId);
+    } else if (_result.isNotEmpty && _diseaseModel != null) {
+      return ResultDisplayCard(diseaseModel: _diseaseModel!);
     } else {
       return SizedBox.shrink();
     }

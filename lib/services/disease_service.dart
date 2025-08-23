@@ -6,13 +6,15 @@ import 'package:rice_app/models/disease_model.dart';
 class DiseaseService {
   // API endpoints for different crops
   static const Map<int, String> _apiEndpoints = {
-    0: "https://rice-server-j666.onrender.com/predict/",
-    1: "https://wheat-server.onrender.com/predict/",
-    2: "https://maize-server.onrender.com/predict/",
-    3: "https://cereals-server.onrender.com/predict/",
-    4: "https://shree-ann-server.onrender.com/predict/",
-    5: "https://tur-server.onrender.com/predict/",
-    6: "https://gram-server.onrender.com/predict/",
+    0: "https://server-rice.onrender.com/predict/",
+    1: "https://server-wheat.onrender.com/predict/",
+    2: "https://server-maize.onrender.com/predict/",
+    3: "https://potato-server.onrender.com/predict/",
+    4: "https://server-tomato.onrender.com/predict/",
+    5: "https://soybean.onrender.com/predict/",
+    6: "https://server-orange.onrender.com/predict/",
+    7: "https://server-apple.onrender.com/predict/",
+    8: "https://server-mango.onrender.com/predict/",
   };
 
   // Get the appropriate API endpoint for a crop
