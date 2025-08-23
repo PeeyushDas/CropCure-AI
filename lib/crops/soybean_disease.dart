@@ -40,5 +40,10 @@ class SoybeanDiseaseModel extends DiseaseModel {
     required String name,
     required String description,
     required int cropId,
-  }) : super(name: name, description: description, cropId: cropId);
+  }) : super(
+         name: name,
+         description: description,
+         cropId: cropId,
+         cure: "cure",
+       );
 }

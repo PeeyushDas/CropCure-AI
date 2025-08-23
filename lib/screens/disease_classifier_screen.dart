@@ -8,6 +8,7 @@ import 'package:rice_app/services/disease_service.dart';
 import 'package:rice_app/services/image_service.dart';
 import 'package:rice_app/widgets/image_display_card.dart';
 import 'package:rice_app/widgets/result_display_card.dart';
+import 'package:rice_app/widgets/cure_display_card.dart';
 
 class DiseaseClassifierScreen extends StatefulWidget {
   final int cropId;
@@ -347,7 +348,14 @@ class _DiseaseClassifierScreenState extends State<DiseaseClassifierScreen>
         ),
       );
     } else if (_result.isNotEmpty && _diseaseModel != null) {
-      return ResultDisplayCard(diseaseModel: _diseaseModel!);
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ResultDisplayCard(diseaseModel: _diseaseModel!),
+          SizedBox(height: SizeConfig.blockSizeVertical * 2),
+          CureDisplayCard(cure: _diseaseModel!.cure), // <-- Add this line
+        ],
+      );
     } else {
       return SizedBox.shrink();
     }

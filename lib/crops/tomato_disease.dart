@@ -36,19 +36,64 @@ class TomatoDiseaseHandler implements CropDiseaseHandler {
     'Tomato Mosaic Virus':
         'A viral disease that causes mottling and discoloration of leaves and fruit.',
     'Healthy': 'No visible symptoms of disease.',
+    'Unknown Disease':
+        'Information about this disease is currently unavailable.',
+  };
+
+  static const Map<String, String> _cures = {
+    'Bacterial Spot': '''1. Use certified disease-free seeds and transplants.
+2. Apply copper-based bactericides at first sign of disease.
+3. Avoid overhead irrigation and working with wet plants.
+4. Remove and destroy infected plant debris.''',
+    'Early Blight': '''1. Use resistant tomato varieties if available.
+2. Apply fungicides such as chlorothalonil or mancozeb at first sign of disease.
+3. Remove and destroy infected leaves and plant debris.
+4. Practice crop rotation and avoid overhead irrigation.''',
+    'Late Blight': '''1. Use resistant varieties and certified seeds.
+2. Apply fungicides such as chlorothalonil or mancozeb at regular intervals.
+3. Remove and destroy infected plants immediately.
+4. Avoid overhead irrigation and practice crop rotation.''',
+    'Leaf Mold': '''1. Improve air circulation by pruning and proper spacing.
+2. Apply fungicides such as chlorothalonil or copper-based products.
+3. Avoid overhead watering and reduce humidity in greenhouses.
+4. Remove and destroy infected leaves.''',
+    'Septoria Leaf Spot': '''1. Remove and destroy infected leaves.
+2. Apply fungicides such as chlorothalonil or mancozeb.
+3. Avoid overhead irrigation and water early in the day.
+4. Practice crop rotation and maintain field hygiene.''',
+    'Spider Mites': '''1. Spray plants with water to dislodge mites.
+2. Use insecticidal soap or horticultural oil.
+3. Introduce natural predators such as ladybugs.
+4. Remove and destroy heavily infested leaves.''',
+    'Target Spot': '''1. Remove and destroy infected leaves.
+2. Apply fungicides such as chlorothalonil or mancozeb.
+3. Ensure good air circulation and avoid overhead irrigation.
+4. Practice crop rotation.''',
+    'Tomato Yellow Leaf Curl Virus':
+        '''1. Control whitefly populations with insecticides or yellow sticky traps.
+2. Remove and destroy infected plants.
+3. Use resistant tomato varieties if available.
+4. Use insect-proof nets in nurseries.''',
+    'Tomato Mosaic Virus': '''1. Remove and destroy infected plants.
+2. Disinfect tools and hands after handling plants.
+3. Avoid tobacco use near tomato plants.
+4. Use resistant varieties if available.''',
+    'Healthy':
+        'No treatment needed. Maintain good field hygiene and monitor regularly.',
+    'Unknown Disease': 'Consult a local agricultural extension for advice.',
   };
 
   @override
   DiseaseModel createDisease(int prediction, int cropId) {
     final diseaseName = _diseaseNames[prediction] ?? 'Unknown Disease';
     final description =
-        _descriptions[diseaseName] ??
-        'Information about this disease is currently unavailable.';
-
+        _descriptions[diseaseName] ?? _descriptions['Unknown Disease']!;
+    final cure = _cures[diseaseName] ?? _cures['Unknown Disease']!;
     return TomatoDiseaseModel(
       name: diseaseName,
       description: description,
       cropId: cropId,
+      cure: cure,
     );
   }
 }
@@ -58,5 +103,6 @@ class TomatoDiseaseModel extends DiseaseModel {
     required String name,
     required String description,
     required int cropId,
-  }) : super(name: name, description: description, cropId: cropId);
+    required String cure,
+  }) : super(name: name, description: description, cropId: cropId, cure: cure);
 }
