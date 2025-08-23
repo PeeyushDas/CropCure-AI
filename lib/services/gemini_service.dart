@@ -8,8 +8,8 @@ class GeminiService {
 
   GeminiService() {
     _model = GenerativeModel(
-      model: 'gemini-2.5-flash-lite', 
-      apiKey: ApiConstants.GEMINI_API_KEY
+      model: 'gemini-2.5-flash-lite',
+      apiKey: ApiConstants.GEMINI_API_KEY,
     );
   }
 
