@@ -9,6 +9,7 @@ import 'package:rice_app/services/image_service.dart';
 import 'package:rice_app/widgets/image_display_card.dart';
 import 'package:rice_app/widgets/result_display_card.dart';
 import 'package:rice_app/widgets/cure_display_card.dart';
+import 'package:rice_app/screens/chat_screen.dart';
 
 class DiseaseClassifierScreen extends StatefulWidget {
   final int cropId;
@@ -198,6 +199,30 @@ class _DiseaseClassifierScreenState extends State<DiseaseClassifierScreen>
         elevation: 0,
       ),
       body: _buildBody(),
+      // Add this floating action button
+      floatingActionButton:
+          _result.isNotEmpty && _diseaseModel != null
+              ? FloatingActionButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (context) => ChatScreen(
+                            diseaseName: _diseaseModel!.name,
+                            cropName: widget.cropName,
+                          ),
+                    ),
+                  );
+                },
+                // label: Text(
+                //    'Ask AI Assistant',
+                //    style: TextStyle(fontSize: SizeConfig.textMultiplier * 1.8),
+                //  ),
+                child: Icon(Icons.chat),
+                backgroundColor: AppConstants.primaryColor,
+              )
+              : null,
     );
   }
 
@@ -353,7 +378,7 @@ class _DiseaseClassifierScreenState extends State<DiseaseClassifierScreen>
         children: [
           ResultDisplayCard(diseaseModel: _diseaseModel!),
           SizedBox(height: SizeConfig.blockSizeVertical * 2),
-          CureDisplayCard(cure: _diseaseModel!.cure), // <-- Add this line
+          CureDisplayCard(cure: _diseaseModel!.cure),
         ],
       );
     } else {
